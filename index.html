@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bridge | 知識の架け橋</title>
+<meta name="description" content="エキスパートと世界中のお客様を繋ぐ知識の架け橋。ナレッジシェアリングを通じて、新たな事業展開をサポートします。" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ Reset ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+    color: #2c2c2c;
+    line-height: 1.8;
+    background: #fff;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  /* ============ Variables ============ */
+  :root {
+    --primary: #1a2942;
+    --accent: #d4761a;
+    --light: #f7f5f2;
+    --gray: #6b6b6b;
+    --border: #e5e5e5;
+    --serif-en: 'Cormorant Garamond', 'Noto Serif JP', serif;
+    --serif-jp: 'Noto Serif JP', serif;
+  }
+
+  /* ============ Header ============ */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--serif-en);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #f0a050);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  }
+  .nav-list {
+    display: flex;
+    gap: 32px;
+  }
+  .nav-list a {
+    font-size: 14px;
+    color: #333;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-list a:hover { color: var(--accent); }
+  .header-cta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .lang-switch {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 1px;
+  }
+  .lang-switch span.active { color: var(--primary); font-weight: 600; }
+  .login-btn {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 22px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .login-btn:hover { background: #b86515; }
+  .menu-toggle { display: none; background: none; border: none; cursor: pointer; }
+
+  /* ============ Hero ============ */
+  .hero {
+    height: 100vh;
+    min-height: 700px;
+    background:
+      linear-gradient(rgba(15,25,45,0.55), rgba(15,25,45,0.55)),
+      url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&auto=format&fit=crop&q=80') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    position: relative;
+  }
+  .hero-content { max-width: 900px; padding: 0 24px; }
+  .hero h1 {
+    font-family: var(--serif-en);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    line-height: 1.2;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.3s forwards;
+  }
+  .hero p {
+    font-size: clamp(15px, 1.4vw, 18px);
+    margin-bottom: 48px;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.6s forwards;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.9s forwards;
+  }
+  .hero-btn {
+    border: 1px solid rgba(255,255,255,0.7);
+    padding: 16px 48px;
+    font-size: 14px;
+    color: #fff;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+    cursor: pointer;
+    background: transparent;
+  }
+  .hero-btn:hover {
+    background: #fff;
+    color: var(--primary);
+  }
+  .hero-link {
+    display: block;
+    margin-top: 32px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    padding-bottom: 4px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    transition: color 0.3s;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 1.2s forwards;
+  }
+  .hero-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ Section common ============ */
+  .section { padding: 120px 32px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-family: var(--serif-en);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--serif-jp);
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 400;
+    color: var(--primary);
+    letter-spacing: 4px;
+    margin-bottom: 24px;
+  }
+  .section-sub {
+    color: var(--gray);
+    font-size: 15px;
+    margin-bottom: 48px;
+  }
+
+  /* ============ About ============ */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-text h2 { margin-bottom: 32px; }
+  .about-lead {
+    font-family: var(--serif-jp);
+    font-size: 22px;
+    color: var(--primary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .about-text p {
+    color: var(--gray);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+  .about-image {
+    height: 480px;
+    background:
+      linear-gradient(135deg, rgba(26,41,66,0.3), rgba(212,118,26,0.3)),
+      url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&auto=format&fit=crop&q=80') center/cover;
+    border-radius: 4px;
+  }
+  .btn-outline {
+    display: inline-block;
+    border: 1px solid var(--primary);
+    padding: 14px 40px;
+    font-size: 14px;
+    color: var(--primary);
+    transition: all 0.3s;
+    letter-spacing: 1px;
+  }
+  .btn-outline:hover { background: var(--primary); color: #fff; }
+
+  /* ============ Services ============ */
+  .services { background: var(--light); text-align: center; }
+  .services-head { margin-bottom: 80px; }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    text-align: left;
+  }
+  .service-card {
+    background: #fff;
+    padding: 0 0 40px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    transition: transform 0.4s, box-shadow 0.4s;
+  }
+  .service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  }
+  .service-image {
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 32px;
+  }
+  .service-card:nth-child(1) .service-image {
+    background-image: linear-gradient(135deg, rgba(26,41,66,0.5), rgba(26,41,66,0.2)), url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=80');
+  }
+  .service-card:nth-child(2) .service-image {
+    background-image: linear-gradient(135deg, rgba(26,41,66,0.5), rgba(26,41,66,0.2)), url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&auto=format&fit=crop&q=80');
+  }
+  .service-card:nth-child(3) .service-image {
+    background-image: linear-gradient(135deg, rgba(26,41,66,0.5), rgba(26,41,66,0.2)), url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80');
+  }
+  .service-card h3 {
+    font-family: var(--serif-jp);
+    font-size: 22px;
+    color: var(--primary);
+    margin: 0 32px 16px;
+    font-weight: 500;
+  }
+  .service-card p {
+    color: var(--gray);
+    font-size: 14px;
+    margin: 0 32px;
+  }
+
+  /* ============ Stats ============ */
+  .stats {
+    background: var(--primary);
+    color: #fff;
+    text-align: center;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .stat-num {
+    font-family: var(--serif-en);
+    font-size: 64px;
+    color: var(--accent);
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .stat-label {
+    font-size: 14px;
+    letter-spacing: 2px;
+    opacity: 0.9;
+  }
+
+  /* ============ Talent ============ */
+  .talent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .talent-image {
+    height: 460px;
+    background:
+      linear-gradient(135deg, rgba(26,41,66,0.2), rgba(212,118,26,0.2)),
+      url('https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&auto=format&fit=crop&q=80') center/cover;
+    border-radius: 4px;
+  }
+
+  /* ============ Careers ============ */
+  .careers {
+    background:
+      linear-gradient(rgba(26,41,66,0.85), rgba(26,41,66,0.85)),
+      url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&auto=format&fit=crop&q=80') center/cover fixed;
+    color: #fff;
+    text-align: center;
+  }
+  .careers .section-title { color: #fff; }
+  .careers .section-sub { color: rgba(255,255,255,0.85); margin-bottom: 40px; }
+  .btn-light {
+    display: inline-block;
+    border: 1px solid #fff;
+    padding: 14px 40px;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+  }
+  .btn-light:hover { background: #fff; color: var(--primary); }
+
+  /* ============ Contact ============ */
+  .contact { text-align: center; }
+  .contact-form {
+    max-width: 600px;
+    margin: 48px auto 0;
+    display: grid;
+    gap: 20px;
+    text-align: left;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    font-family: inherit;
+    font-size: 14px;
+    background: #fafafa;
+    transition: border-color 0.3s;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .contact-form textarea { min-height: 140px; resize: vertical; }
+  .contact-form button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 16px;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: background 0.3s;
+    font-family: inherit;
+  }
+  .contact-form button:hover { background: var(--accent); }
+  .contact-form button:disabled { background: #999; cursor: not-allowed; }
+  .form-status {
+    text-align: center;
+    padding: 14px;
+    margin-top: 8px;
+    font-size: 14px;
+    border-radius: 2px;
+    display: none;
+  }
+  .form-status.success {
+    display: block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+  }
+  .form-status.error {
+    display: block;
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+  }
+  .form-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  /* ============ Footer ============ */
+  .footer {
+    background: #0f1828;
+    color: #fff;
+    padding: 64px 32px 32px;
+  }
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand .logo { color: #fff; margin-bottom: 16px; }
+  .footer-brand p {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .footer h4 {
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    color: var(--accent);
+  }
+  .footer ul li {
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+  }
+  .footer ul li a:hover { color: var(--accent); }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ============ Reveal animation ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============ Responsive ============ */
+  @media (max-width: 900px) {
+    .nav-list, .lang-switch { display: none; }
+    .menu-toggle { display: block; font-size: 24px; color: var(--primary); }
+    .about, .talent { grid-template-columns: 1fr; gap: 48px; }
+    .service-grid, .stats-grid, .footer-grid { grid-template-columns: 1fr; }
+    .section { padding: 80px 24px; }
+    .header-inner { padding: 16px 24px; }
+    .stat-num { font-size: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Header ========== -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark"></span>
+      Bridge
+    </a>
+    <nav>
+      <ul class="nav-list">
+        <li><a href="#about">私たちについて</a></li>
+        <li><a href="#services">サービス</a></li>
+        <li><a href="#stats">実績</a></li>
+        <li><a href="#careers">採用情報</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+      </ul>
+    </nav>
+    <div class="header-cta">
+      <div class="lang-switch">
+        <span class="active">JP</span> / <span>EN</span> / <span>KO</span>
+      </div>
+      <a href="#contact" class="login-btn">ログイン</a>
+      <button class="menu-toggle" aria-label="menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Share Knowledge, Empower The World</h1>
+    <p>知識のシェアリングを通じて、世界の架け橋へ</p>
+    <div class="hero-buttons">
+      <button class="hero-btn">お客様になる</button>
+      <button class="hero-btn">エキスパートになる</button>
+    </div>
+    <a href="#services" class="hero-link">人材紹介サービスはこちらから →</a>
+  </div>
+</section>
+
+<!-- ========== About ========== -->
+<section class="section" id="about">
+  <div class="container about">
+    <div class="about-text reveal">
+      <div class="section-label">ABOUT US</div>
+      <h2 class="section-title">私たちについて</h2>
+      <p class="about-lead">エキスパートと世界中のお客様を繋ぐ<br>知識の架け橋 (Bridge)</p>
+      <p>
+        Bridgeは "知識"という人の無形資産をシェアする仕組みを通じて、新たなマーケットへの参入・迅速なリスク把握・ビジネスチャンスの選定を可能にし、皆さまの事業展開のパートナーとなっていきます。"知識"をシェアする機会を創出することで、エキスパートのキャリアにおいても、新しい働き方の提供ができる、プラットフォームになりたいと考えています。
+      </p>
+      <a href="#" class="btn-outline">詳細を見る</a>
+    </div>
+    <div class="about-image reveal"></div>
+  </div>
+</section>
+
+<!-- ========== Services ========== -->
+<section class="section services" id="services">
+  <div class="container">
+    <div class="services-head reveal">
+      <div class="section-label">SERVICES</div>
+      <h2 class="section-title">サービス</h2>
+      <p class="section-sub">アジア最大級のエキスパート知識シェアサービス</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card reveal">
+        <div class="service-image"></div>
+        <h3>エキスパートナレッジバンク</h3>
+        <p>エキスパートと世界中の投資家のインタビュー内容を書き起こし形式でご提供。いつでも簡単にアクセスし放題。</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-image"></div>
+        <h3>エキスパートマッチング</h3>
+        <p>調査したいテーマに関して世界中のエキスパートにインタビューを実施。迅速かつリーズナブルに業界の専門知識を収集できます。</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-image"></div>
+        <h3>エキスパートソリューション</h3>
+        <p>独自のエキスパートネットワークを用いて調査を行い、デスクリサーチ・レポート作成・戦略アドバイスを行います。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Stats ========== -->
+<section class="section stats" id="stats">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:64px;">
+      <div class="section-label" style="color:var(--accent);">OUR ACHIEVEMENTS</div>
+      <h2 class="section-title" style="color:#fff;">数字で見る実績</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="reveal">
+        <div class="stat-num">600+</div>
+        <div class="stat-label">ビジネスパートナー</div>
+        <p style="margin-top:16px;font-size:13px;opacity:0.8;line-height:1.7;">グローバル戦略コンサルファーム、PE・ヘッジファンド、フォーチュン500企業まで</p>
+      </div>
+      <div class="reveal">
+        <div class="stat-num">160K+</div>
+        <div class="stat-label">エキスパート登録数</div>
+        <p style="margin-top:16px;font-size:13px;opacity:0.8;line-height:1.7;">あらゆる言語・地域のエキスパートをご紹介します</p>
+      </div>
+      <div class="reveal">
+        <div class="stat-num">300+</div>
+        <div class="stat-label">業界カバー</div>
+        <p style="margin-top:16px;font-size:13px;opacity:0.8;line-height:1.7;">金融・テクノロジーからヘルスケア、製造業、新興市場まで</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Talent ========== -->
+<section class="section">
+  <div class="container talent">
+    <div class="talent-image reveal"></div>
+    <div class="reveal">
+      <div class="section-label">TALENT SEARCH</div>
+      <h2 class="section-title">タレント・サーチ</h2>
+      <p class="about-lead">人と機会を、最適な形で。</p>
+      <p style="color:var(--gray);font-size:15px;margin-bottom:32px;">
+        ファンド、コンサルファーム、スタートアップに特化した人材紹介サービス。独自のデータベースを活用し、高精度のマッチングを迅速に提供します。
+      </p>
+      <a href="#contact" class="btn-outline">サービス詳細</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Careers ========== -->
+<section class="section careers" id="careers">
+  <div class="container reveal">
+    <div class="section-label">CAREERS</div>
+    <h2 class="section-title">採用情報</h2>
+    <p class="section-sub">「急成長ベンチャー」×「グローバル」な環境で<br>一緒に働く仲間を募集しています。</p>
+    <a href="#contact" class="btn-light">採用情報を見る</a>
+  </div>
+</section>
+
+<!-- ========== Contact ========== -->
+<section class="section contact" id="contact">
+  <div class="container reveal">
+    <div class="section-label">CONTACT</div>
+    <h2 class="section-title">お問い合わせ</h2>
+    <p class="section-sub">サービスに関するご質問・ご相談はこちらから</p>
+    <!-- ▼ Formspree連携: action のURLを自分のFormspreeフォームIDに書き換えてください ▼ -->
+    <form id="contactForm" class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="text" name="name" placeholder="お名前 *" required />
+      <input type="email" name="email" placeholder="メールアドレス *" required />
+      <input type="text" name="company" placeholder="会社名" />
+      <textarea name="message" placeholder="お問い合わせ内容 *" required></textarea>
+
+      <!-- スパム対策: ハニーポット（Bot対策。人間には見えない） -->
+      <input type="text" name="_gotcha" class="form-honeypot" tabindex="-1" autocomplete="off" />
+
+      <!-- メール件名（任意） -->
+      <input type="hidden" name="_subject" value="【Bridge】お問い合わせがありました" />
+
+      <!-- 自動返信用の差出人表示（任意） -->
+      <input type="hidden" name="_replyto" value="" />
+
+      <button type="submit" id="submitBtn">送信する</button>
+      <div class="form-status" id="formStatus"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ========== Footer ========== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <span class="logo-mark"></span>
+        Bridge
+      </a>
+      <p>エキスパートと世界中のお客様を繋ぐ知識の架け橋。<br>ナレッジシェアリングを通じて、世界の事業展開をサポートします。</p>
+    </div>
+    <div>
+      <h4>SERVICES</h4>
+      <ul>
+        <li><a href="#services">ナレッジバンク</a></li>
+        <li><a href="#services">エキスパートマッチング</a></li>
+        <li><a href="#services">ソリューション</a></li>
+        <li><a href="#services">タレント・サーチ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>COMPANY</h4>
+      <ul>
+        <li><a href="#about">私たちについて</a></li>
+        <li><a href="#stats">実績</a></li>
+        <li><a href="#careers">採用情報</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>LEGAL</h4>
+      <ul>
+        <li><a href="#">プライバシーポリシー</a></li>
+        <li><a href="#">利用規約</a></li>
+        <li><a href="#">法令遵守</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Bridge Inc. All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => io.observe(r));
+
+  // ============ Formspree 非同期送信 ============
+  const form = document.getElementById('contactForm');
+  const statusEl = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // action URLが未設定の場合の警告
+      if (form.action.includes('YOUR_FORM_ID')) {
+        statusEl.className = 'form-status error';
+        statusEl.textContent = '⚠ FormspreeのフォームIDが未設定です。index.htmlのaction属性を編集してください。';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '送信中...';
+      statusEl.className = 'form-status';
+      statusEl.textContent = '';
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          statusEl.className = 'form-status success';
+          statusEl.textContent = '✓ お問い合わせを送信しました。担当者よりご連絡いたします。';
+          form.reset();
+        } else {
+          const json = await res.json().catch(() => ({}));
+          const msg = json.errors ? json.errors.map(err => err.message).join(', ') : '送信に失敗しました。時間をおいて再度お試しください。';
+          statusEl.className = 'form-status error';
+          statusEl.textContent = '✗ ' + msg;
+        }
+      } catch (err) {
+        statusEl.className = 'form-status error';
+        statusEl.textContent = '✗ ネットワークエラーが発生しました。再度お試しください。';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '送信する';
+      }
+    });
+  }
+
+  // Header shadow on scroll
+  const header = document.querySelector('.header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+    } else {
+      header.style.boxShadow = '0 1px 0 rgba(0,0,0,0.05)';
+    }
+  });
+</script>
+
+</body>
+</html>
